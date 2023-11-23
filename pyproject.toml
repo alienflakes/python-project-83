@@ -3,6 +3,10 @@ name = "hexlet-code"
 version = "0.1.0"
 description = "Page Analyzer - SEO content analysis, third project of Hexlet's Python Course"
 authors = ["phelix alienflakes <alienflakes38@gmail.com>"]
+packages = [
+    { include = "page_analyzer" }
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -10,7 +14,7 @@ Flask = "^3.0.0"
 gunicorn = "^21.2.0"
 
 [tool.poetry.dev-dependencies]
-flake8 = "^4.0.0"
+flake8 = "^4.0.1"
 python-dotenv = "^1.0.0"
 
 [build-system]
