@@ -1,2 +1,4 @@
-# flake8: noqa
-from page_analyzer.app import *
+from .app import app
+
+
+__all__ = ('app', )
