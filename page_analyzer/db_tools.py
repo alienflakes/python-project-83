@@ -7,11 +7,15 @@ import datetime
 
 load_dotenv()
 DATABASE_URL = os.getenv('DATABASE_URL')
-conn = psycopg2.connect(DATABASE_URL)
+
+
+def db_connect():
+    return psycopg2.connect(DATABASE_URL)
 
 
 def db_execute(query, fetch=True, fetchall=False):
-    with conn.cursor(cursor_factory=NamedTupleCursor) as cursor:
+    with db_connect() as conn:
+        cursor = conn.cursor(cursor_factory=NamedTupleCursor)
         cursor.execute(query)
         if fetchall:
             return cursor.fetchall()
