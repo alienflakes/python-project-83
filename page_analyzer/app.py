@@ -64,10 +64,16 @@ def url_page(id):
 
 @app.post('/urls/<int:id>/checks')
 def check_url(id):
+    url = db_tools.get_url_by('id', id)
     checked_url = db_tools.add_url_check(id)
+    if not checked_url:
+        flash('Произошла ошибка при проверке', 'danger')
+        messages = get_flashed_messages(with_categories=True)
+        return render_template('url_page', messages=messages,
+                               url=url)
     flash('Страница успешно проверена', 'success')
     messages = get_flashed_messages(with_categories=True)
     url_checks = db_tools.get_url_checks(id)
     return render_template('url_page.html', messages=messages,
-                           url=db_tools.get_url_by('id', id),
+                           url=url,
                            url_checks=url_checks)
