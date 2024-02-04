@@ -14,10 +14,10 @@ app.secret_key = os.getenv('SECRET_KEY')
 
 
 @app.route('/')
-def index():
+def main_page():
     messages = get_flashed_messages(with_categories=True)
     return render_template(
-        'index.html',
+        'main_page.html',
         messages=messages
     )
 
@@ -31,7 +31,7 @@ def add_url():
     if not validate_url(normalized_url):
         flash('Некорректный URL', 'danger')
         messages = get_flashed_messages(with_categories=True)
-        return render_template('index.html', messages=messages), 422
+        return render_template('main_page.html', messages=messages), 422
 
     url = db_tools.get_url_by('name', normalized_url)
     if url:
@@ -56,6 +56,6 @@ def url_page(id):
     url = db_tools.get_url_by('id', id)
     if not url:
         flash('Запрашиваемая страница не найдена', 'warning')
-        return redirect(url_for('index'), 404)
+        return redirect(url_for('main_page'), 404)
     return render_template('url_page.html',
                            messages=messages, url=url)
