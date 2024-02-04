@@ -24,10 +24,10 @@
             </a>
           </td>
           <td>
-            {{ url.created_at }}
+            {{ url.created_at or '' }}
           </td>
           <td>
-            {{ url.code }}
+            {{ url.status_code or '' }}
           </td>
         </tr>
         {% endfor %}
