@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 from validators.url import url as validate_url
 from dotenv import load_dotenv
 from page_analyzer import db_tools
+import requests
 
 
 load_dotenv()
@@ -64,16 +65,19 @@ def url_page(id):
 
 @app.post('/urls/<int:id>/checks')
 def check_url(id):
-    url = db_tools.get_url_by('id', id)
-    checked_url = db_tools.add_url_check(id)
-    if not checked_url:
+    url_name = db_tools.get_url_by('id', id).name
+    if not url_name:
+        flash('Запрашиваемая страница не найдена', 'warning')
+        return redirect(url_for('main_page'), 404)
+
+    try:
+        r = requests.get(url_name)
+        r.raise_for_status()
+    except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
-        messages = get_flashed_messages(with_categories=True)
-        return render_template('url_page', messages=messages,
-                               url=url)
+        return redirect(url_for('url_page', id=id), 400)
+
+    db_tools.add_url_check(url_id=id,
+                           status_code=r.status_code)
     flash('Страница успешно проверена', 'success')
-    messages = get_flashed_messages(with_categories=True)
-    url_checks = db_tools.get_url_checks(id)
-    return render_template('url_page.html', messages=messages,
-                           url=url,
-                           url_checks=url_checks)
+    return redirect(url_for('url_page', id=id))
