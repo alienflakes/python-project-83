@@ -4,7 +4,7 @@ import os
 from urllib.parse import urlparse
 from validators.url import url as validate_url
 from dotenv import load_dotenv
-from page_analyzer import db_tools
+from . import db_tools, url_parsing
 import requests
 
 
@@ -71,13 +71,11 @@ def check_url(id):
         return redirect(url_for('main_page'), 404)
 
     try:
-        r = requests.get(url_name)
-        r.raise_for_status()
+        response = url_parsing.get_response(url_name)
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('url_page', id=id), 400)
 
-    db_tools.add_url_check(url_id=id,
-                           status_code=r.status_code)
+    db_tools.add_url_check(id, url_parsing.get_url_data(response))
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('url_page', id=id))

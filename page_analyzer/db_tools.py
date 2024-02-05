@@ -51,11 +51,14 @@ def insert_url(name):
     return get_url_by('name', name)
 
 
-def add_url_check(url_id, status_code):
+def add_url_check(url_id, data):
     date = datetime.date.today()
     query = f"""
-                INSERT INTO url_checks (url_id, status_code, created_at)
-                VALUES ('{url_id}', '{status_code}', '{date}') ;
+                INSERT INTO url_checks (url_id, status_code,
+                h1, title, description, created_at)
+                VALUES ({url_id}, {data['status_code']},
+                '{data['h1']}', '{data['title']}',
+                '{data['description']}', '{date}') ;
             """
     db_execute(query, fetch=False)
     return get_url_by('id', url_id, from_db='url_checks')
