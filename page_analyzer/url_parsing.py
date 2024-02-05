@@ -11,7 +11,7 @@ def get_response(url_name):
 def get_url_data(response):
     url_data = {
         'description': '',
-        }
+    }
     url_data['status_code'] = response.status_code
     soup = BeautifulSoup(response.text, 'html.parser')
     url_data['h1'] = soup.h1.text if soup.h1 else ''
