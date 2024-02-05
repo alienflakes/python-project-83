@@ -68,13 +68,13 @@ def check_url(id):
     url_name = db_tools.get_url_by('id', id).name
     if not url_name:
         flash('Запрашиваемая страница не найдена', 'warning')
-        return redirect(url_for('main_page'), 404)
+        return redirect(url_for('main_page'))
 
     try:
         response = url_parsing.get_response(url_name)
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
-        return redirect(url_for('url_page', id=id), 400)
+        return redirect(url_for('url_page', id=id))
 
     db_tools.add_url_check(id, url_parsing.get_url_data(response))
     flash('Страница успешно проверена', 'success')
