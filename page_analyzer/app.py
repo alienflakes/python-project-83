@@ -46,9 +46,9 @@ def add_url():
 @app.get('/urls')
 def urls():
     messages = get_flashed_messages(with_categories=True)
-    all_urls = db_tools.get_all_urls()
+    urls = db_tools.get_all_urls()
     return render_template('urls.html', messages=messages,
-                           urls=all_urls)
+                           urls=urls)
 
 
 @app.get('/urls/<int:id>')
@@ -71,7 +71,8 @@ def check_url(id):
         return redirect(url_for('main_page'))
 
     try:
-        response = url_parsing.get_response(url_name)
+        response = requests.get(url_name)
+        response.raise_for_status()
     except requests.exceptions.RequestException:
         flash('Произошла ошибка при проверке', 'danger')
         return redirect(url_for('url_page', id=id))

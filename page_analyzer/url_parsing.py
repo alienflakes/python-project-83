@@ -1,11 +1,4 @@
-import requests
 from bs4 import BeautifulSoup
-
-
-def get_response(url_name):
-    response = requests.get(url_name)
-    response.raise_for_status()
-    return response
 
 
 def get_url_data(response):
