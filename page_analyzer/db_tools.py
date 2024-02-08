@@ -25,7 +25,7 @@ def db_execute(query, fetch=True, fetchall=False):
 def get_url_by(param, value, from_db='urls'):
     return db_execute(
         f"""SELECT * FROM {from_db} WHERE {param} = '{value}'"""
-        )
+    )
 
 
 def get_all_urls():
