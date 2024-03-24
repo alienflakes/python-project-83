@@ -33,14 +33,18 @@ def get_all_urls():
         "SELECT id, name FROM urls ORDER BY id DESC",
         fetchall=True
     )
+    all_checks = db_execute(
+        "SELECT * FROM url_checks ORDER BY id DESC",
+        fetchall=True
+    )
     data = []
     for url in urls:
-        check = get_url_checks(url.id, fetchall=False)
+        url_checks = [check for check in all_checks if check.url_id == url.id]
         data.append({
             'id': url.id,
             'name': url.name,
-            'status_code': check.status_code if check else '',
-            'created_at': check.created_at if check else ''
+            'status_code': url_checks[0].status_code if url_checks else '',
+            'created_at': url_checks[0].created_at if url_checks else ''
         })
     return data
 
